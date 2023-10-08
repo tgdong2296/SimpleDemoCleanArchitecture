@@ -9,7 +9,6 @@
 import Foundation
 import RxSwift
 import RxCocoa
-import MGArchitecture
 
 struct MainViewModel {
     let navigator: MainNavigatorType
@@ -24,12 +23,11 @@ extension MainViewModel: ViewModelType {
     
     struct Output {
         let repos: Driver<[GithubRepo]>
-        let selected: Driver<Void>
         let error: Driver<Error>
         let indicator: Driver<Bool>
     }
     
-    func transform(_ input: MainViewModel.Input) -> MainViewModel.Output {
+    func transform(_ input: MainViewModel.Input, disposeBag: DisposeBag) -> MainViewModel.Output {
         let indicator = ActivityIndicator()
         let error = ErrorTracker()
         
@@ -41,18 +39,18 @@ extension MainViewModel: ViewModelType {
                     .asDriverOnErrorJustComplete()
             }
         
-        let selected = input.selectTrigger
+        input.selectTrigger
             .withLatestFrom(repos) { indexPath, repos in
                 return repos[indexPath.row]
             }
             .do(onNext: { repo in
                 self.navigator.toRepoDetail(githubRepo: repo)
             })
-            .mapToVoid()
+            .drive()
+            .disposed(by: disposeBag)
         
         return Output(
             repos: repos,
-            selected: selected,
             error: error.asDriver(),
             indicator: indicator.asDriver()
         )

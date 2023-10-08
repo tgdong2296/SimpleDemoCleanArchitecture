@@ -9,7 +9,6 @@
 import Foundation
 import RxSwift
 import RxCocoa
-import MGArchitecture
 
 struct AppViewModel {
     let navigator: AppNavigatorType
@@ -22,18 +21,18 @@ extension AppViewModel: ViewModelType {
     }
     
     struct Output {
-        let toMain: Driver<Void>
+        
     }
     
-    func transform(_ input: AppViewModel.Input) -> AppViewModel.Output {
+    func transform(_ input: AppViewModel.Input, disposeBag: DisposeBag) -> AppViewModel.Output {
         
-        let toMain = input.loadTrigger
+        input.loadTrigger
             .do(onNext: { _ in
                 self.navigator.toMain()
             })
+            .drive()
+            .disposed(by: disposeBag)
         
-        return Output(
-            toMain: toMain
-        )
+        return Output()
     }
 }

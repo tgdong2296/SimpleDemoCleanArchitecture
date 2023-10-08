@@ -9,8 +9,6 @@
 import Foundation
 import RxSwift
 import RxCocoa
-import MGArchitecture
-import MGAPIService
 
 protocol RepoDetailUseCaseType {
     

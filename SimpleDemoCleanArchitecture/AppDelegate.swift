@@ -14,6 +14,7 @@ import NSObject_Rx
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
+    var disposeBag = DisposeBag()
     var window: UIWindow?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
@@ -30,10 +31,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let viewModel = AppViewModel(navigator: navigator, useCase: useCase)
         
         let input = AppViewModel.Input(loadTrigger: Driver.just(()))
-        let output = viewModel.transform(input)
-        output.toMain
-            .drive()
-            .disposed(by: rx.disposeBag)
+        let _ = viewModel.transform(input, disposeBag: disposeBag)
     }
 }
 

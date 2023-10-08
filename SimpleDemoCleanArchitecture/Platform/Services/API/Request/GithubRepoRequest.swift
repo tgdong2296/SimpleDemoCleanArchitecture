@@ -7,17 +7,16 @@
 //
 
 import Foundation
-import ObjectMapper
 import Alamofire
 
-final class GithubRepoRequest: BaseRequest {
+struct GithubRepoRequest {
+    let page: Int
+    let perPage: Int
+    let language: String
     
-    required init(page: Int, perPage: Int = 10) {
-        let body: [String: Any]  = [
-            "q": "language:swift",
-            "per_page": perPage,
-            "page": page
-        ]
-        super.init(url: URLs.githubRepo, requestType: .get, body: body)
+    init(page: Int, perPage: Int = 10, language: String = "language:swift") {
+        self.page = page
+        self.perPage = perPage
+        self.language = language
     }
 }
