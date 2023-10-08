@@ -9,7 +9,11 @@
 import Foundation
 
 struct URLs {
-    private static var APIBaseUrl = "https://api.github.com"
-    
-    public static let githubRepo = APIBaseUrl + "/search/repositories"
+    enum API {
+        #if PRD
+        static let baseUrl = "https://api.github.com"
+        #else
+        static let baseUrl = "https://api.github.com"
+        #endif
+    }
 }

@@ -12,7 +12,6 @@ import RxSwift
 import RxCocoa
 import Then
 import NSObject_Rx
-import MGArchitecture
 import Reusable
 import SDWebImage
 
@@ -20,6 +19,7 @@ class RepoDetailViewController: UIViewController, BindableType {
     @IBOutlet weak var avatarImageView: UIImageView!
     @IBOutlet weak var nameLabel: UILabel!
     
+    var disposeBag: DisposeBag! = DisposeBag()
     var viewModel: RepoDetailViewModel!
     
     override func viewDidLoad() {
@@ -36,7 +36,7 @@ class RepoDetailViewController: UIViewController, BindableType {
         let input = RepoDetailViewModel.Input(
             loadTrigger: Driver.just(())
         )
-        let output = viewModel.transform(input)
+        let output = viewModel.transform(input, disposeBag: disposeBag)
         
         output.repoImage
             .drive(avatarBinding)

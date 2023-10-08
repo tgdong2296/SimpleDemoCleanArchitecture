@@ -9,8 +9,6 @@
 import Foundation
 import RxSwift
 import RxCocoa
-import MGArchitecture
-import MGAPIService
 
 protocol MainUseCaseType {
     func getRepos() -> Observable<[GithubRepo]>
@@ -19,7 +17,7 @@ protocol MainUseCaseType {
 struct MainUseCase: MainUseCaseType {
     
     func getRepos() -> Observable<[GithubRepo]> {
-        let request = GithubRepoRequest(page: 1)
+        let request = GithubRepoRequest(page: 1, perPage: 20)
         let repository = GithubRepoRepository()
         return repository.getGithubRepos(input: request)
     }

@@ -7,16 +7,11 @@
 //
 
 import Foundation
-import ObjectMapper
 
-final class GithubRepoResponse : Mappable {
-    var githubRepos = [GithubRepo]()
+struct GithubRepoResponse: Codable {
+    let githubRepos: [GithubRepo]
     
-    required init(map: Map) {
-        mapping(map: map)
-    }
-    
-    func mapping(map: Map) {
-        githubRepos <- map["items"]
+    enum CodingKeys: String, CodingKey {
+        case githubRepos = "items"
     }
 }

@@ -19,8 +19,7 @@ class GithubRepoCell: UITableViewCell, NibReusable {
     }
     
     func setContentForCell(_ githubRepo: GithubRepo) {
-        avatarImageView.sd_setShowActivityIndicatorView(true)
-        avatarImageView.sd_setImage(with: URL(string: githubRepo.avatarURLString), completed: nil)
+        avatarImageView.sd_setImage(with: URL(string: githubRepo.owner.avatarURL), completed: nil)
         nameLabel.text = githubRepo.name
     }
 }

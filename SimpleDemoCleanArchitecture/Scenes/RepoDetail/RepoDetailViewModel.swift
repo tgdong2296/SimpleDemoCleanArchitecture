@@ -9,7 +9,6 @@
 import Foundation
 import RxSwift
 import RxCocoa
-import MGArchitecture
 
 struct RepoDetailViewModel {
     let navigator: RepoDetailNavigatorType
@@ -29,7 +28,7 @@ extension RepoDetailViewModel: ViewModelType {
         let indicator: Driver<Bool>
     }
     
-    func transform(_ input: RepoDetailViewModel.Input) -> RepoDetailViewModel.Output {
+    func transform(_ input: RepoDetailViewModel.Input, disposeBag: DisposeBag) -> RepoDetailViewModel.Output {
         let indicator = ActivityIndicator()
         let error = ErrorTracker()
         
@@ -40,7 +39,7 @@ extension RepoDetailViewModel: ViewModelType {
         
         let repoImageUrl = input.loadTrigger
             .map { _ in
-                return self.repo.avatarURLString
+                return self.repo.owner.avatarURL
             }
         
         return Output(

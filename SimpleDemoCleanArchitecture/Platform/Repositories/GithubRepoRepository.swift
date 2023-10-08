@@ -7,20 +7,21 @@
 //
 
 import Foundation
-import ObjectMapper
 import RxSwift
 
 protocol GithubRepoRepositoryType {
-    func getGithubRepos(input: GithubRepoRequest) -> Observable<[GithubRepo]>
+    func getGithubRepos(input request: GithubRepoRequest) -> Observable<[GithubRepo]>
 }
 
 class GithubRepoRepository: GithubRepoRepositoryType {
-    private let api: APIService = APIService.share
+    private let apiService: APIService = APIService.shared
     
-    func getGithubRepos(input: GithubRepoRequest) -> Observable<[GithubRepo]> {
-        return api.request(input: input)
-            .map { (response: GithubRepoResponse) -> [GithubRepo] in
-                return response.githubRepos
+    func getGithubRepos(input request: GithubRepoRequest) -> Observable<[GithubRepo]> {
+        return apiService.request(.repositories(request: request))
+            .map(GithubRepoResponse.self)
+            .asObservable()
+            .map {
+                $0.githubRepos
             }
     }
 }

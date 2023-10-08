@@ -12,12 +12,12 @@ import RxSwift
 import RxCocoa
 import Then
 import NSObject_Rx
-import MGArchitecture
 import Reusable
 
 class MainViewController: UIViewController, BindableType {
     @IBOutlet weak var tableView: UITableView!
     
+    var disposeBag: DisposeBag! = DisposeBag()
     var viewModel: MainViewModel!
     
     override func viewDidLoad() {
@@ -27,7 +27,7 @@ class MainViewController: UIViewController, BindableType {
     }
     
     private func configView() {
-        title = "Gitgub"
+        title = "Github"
         tableView.do {
             $0.register(cellType: GithubRepoCell.self)
             $0.rowHeight = 80
@@ -39,7 +39,7 @@ class MainViewController: UIViewController, BindableType {
             loadTrigger: Driver.just(()),
             selectTrigger: tableView.rx.itemSelected.asDriver()
         )
-        let output = viewModel.transform(input)
+        let output = viewModel.transform(input, disposeBag: disposeBag)
         
         output.repos
             .drive(tableView.rx.items) { tableView, index, repo in
@@ -48,10 +48,6 @@ class MainViewController: UIViewController, BindableType {
                 cell.setContentForCell(repo)
                 return cell
             }
-            .disposed(by: rx.disposeBag)
-        
-        output.selected
-            .drive()
             .disposed(by: rx.disposeBag)
         
         output.indicator
